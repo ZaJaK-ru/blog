@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable prettier/prettier */
 /* eslint-disable object-curly-newline */
 /* eslint-disable react/jsx-props-no-spreading */
@@ -101,9 +102,9 @@ function NewArticle() {
             })}
           />
           {errors.description && (
-            <span
-              className={styles.error}
-            >{`${errors.description.message}`}</span>
+            <span className={styles.error}>
+              {`${errors.description.message}`}
+            </span>
           )}
         </label>
 

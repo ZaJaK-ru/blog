@@ -1,3 +1,4 @@
+/* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable prettier/prettier */
 /* eslint-disable object-curly-newline */
 /* eslint-disable react/jsx-props-no-spreading */
