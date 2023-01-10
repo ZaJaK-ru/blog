@@ -1,0 +1,30 @@
+.avatar {
+  display: flex;
+  
+  &__info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    margin-right: 12px;
+  }
+
+  &__name {
+    font-size: 18px;
+    line-height: 28px;
+    color: rgba(0, 0, 0, 0.85);
+  }
+
+  &__date {
+    font-size: 12px;
+    line-height: 22px;
+    color: rgba(0, 0, 0, 0.5);
+  }
+
+  &__img {
+    vertical-align: middle;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+  }
+}

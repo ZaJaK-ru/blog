@@ -1,0 +1,91 @@
+.wrapper {
+  display: flex;
+  justify-content:center;
+  font-family: 'Roboto', sans-serif;
+}
+
+h2, .info {
+  text-align: center;
+  margin:0;
+}
+
+.form {
+  padding: 48px 32px;
+  background-color: white;
+  margin: 60px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  min-width: 384px;
+  box-shadow: 0px 22px 106px rgba(0, 0, 0, 0.07), 0px 9.19107px 44.2843px rgba(0, 0, 0, 0.0503198), 0px 4.91399px 23.6765px rgba(0, 0, 0, 0.0417275), 0px 2.75474px 13.2728px rgba(0, 0, 0, 0.035), 0px 1.46302px 7.04911px rgba(0, 0, 0, 0.0282725), 0px 0.608796px 2.93329px rgba(0, 0, 0, 0.0196802);
+  border-radius: 6px;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.input {
+  border: 1px solid #D9D9D9;
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 16px;
+  line-height: 24px;
+
+  &:focus {
+    border: solid 1px #D9D9D9;
+  }
+
+  &::placeholder {
+    color: #BFBFBF;
+  }
+}
+
+.labelcheckbox {
+  display: flex;
+  align-items: flex-start;
+  padding-top: 8px;
+  border-top: 1px solid #E8E8E8;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.check {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  border: 1px solid #D9D9D9;
+  border-radius: 2px;
+  background: white;
+
+  &:checked {
+    background: #1890FF;
+    border-color: #1890FF;
+    background-image: url("data:image/svg+xml,%3Csvg width='11' height='9' viewBox='0 0 11 9' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.91308 4.03516H1.91326C1.99256 4.03525 2.07081 4.05331 2.14213 4.08798C2.21341 4.12262 2.27591 4.17295 2.32497 4.2352L1.91308 4.03516ZM1.91308 4.03516H1.09394C0.890308 4.03516 0.776602 4.26975 0.902321 4.4292L0.902371 4.42927L4.11214 8.49567L4.11218 8.49573C4.32247 8.76188 4.72568 8.76114 4.93667 8.49617L4.93708 8.49566L10.6597 1.24398C10.6598 1.24378 10.66 1.24358 10.6602 1.24338C10.7884 1.08295 10.6699 0.85 10.4689 0.85H9.6498C9.48941 0.85 9.33668 0.9235 9.2376 1.05044C9.23751 1.05055 9.23742 1.05066 9.23734 1.05077L4.52403 7.02157M1.91308 4.03516L4.52403 7.02157M4.52403 7.02157L2.32506 4.23531L4.52403 7.02157Z' fill='white' stroke='white' stroke-width='0.3'/%3E%3C/svg%3E");    background-position: center;
+    background-repeat: no-repeat;
+  }
+}
+
+.button {
+  background: #1890FF;
+  color: white;
+  padding: 8px;
+  border-radius: 4px;
+  border: none;
+  font-size: 16px;
+  line-height: 24px;
+  cursor: pointer;
+}
+
+.error {
+  font-size: 14px;
+  line-height: 22px;
+  bottom: -35px;
+  color: #F5222D;
+}

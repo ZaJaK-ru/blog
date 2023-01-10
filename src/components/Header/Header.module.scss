@@ -1,0 +1,59 @@
+.header {
+  padding: 18px 40px;
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &__logo {
+    font-size: 18px;
+    line-height: 28px;  
+    color: rgba(0, 0, 0, 0.85);
+  }
+
+  @media (max-width: 600px){
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 500px;
+  }
+}
+
+.btn {
+  border: none;
+  background-color: transparent;
+  font-size: 18px;
+  line-height: 28px;
+  cursor: pointer;
+
+  &__signup {
+    padding: 6px 18px;
+    color: #52C41A;
+    border: 1px solid #52C41A;
+    border-radius: 5px; 
+  }
+
+  &__logout {
+    padding: 6px 18px;
+    border: 1px solid rgba(0, 0, 0, 0.75);
+    border-radius: 5px;
+  }
+
+  &__create {
+    color: #52C41A;
+    padding: 6px 10px;
+    font-size: 14px;
+    line-height: 22px;
+    border: 1px solid #52C41A;
+    border-radius: 5px;
+  }
+
+  &:hover {
+    opacity: 0.6;
+  }
+}
+
+.menu {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+}

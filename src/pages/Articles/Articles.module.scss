@@ -1,0 +1,16 @@
+.wrapper {
+  width: 100%;
+  padding: 26px;
+}
+
+.articles {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 26px;
+}
+
+.pagination {
+  padding: 26px;
+  text-align: center;
+}

@@ -1,0 +1,120 @@
+.article {
+  overflow: hidden;
+  box-sizing: border-box;
+  width: 70%;
+  min-width: 500px;
+  height: 140px;
+  padding: 15px 14px 24px 19px;
+  background: #FFFFFF;
+  border-radius: 5px;
+  filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.15));
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__left {
+
+  }
+
+  &__top {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+
+  &__title {
+    font-size: 20px;
+    line-height: 28px;
+    color: #1890FF;
+    text-overflow: ellipsis;
+    margin-right: 10px;
+  }
+
+  &__like {
+    margin-left: 5px;
+    font-size: 12px;
+    line-height: 22px;
+    color: rgba(0, 0, 0, 0.75);
+  }
+
+  &__tags {
+    margin-top: 4px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-start;
+  }
+
+  &__tag {
+    padding: 2px 5px;
+    font-size: 12px;
+    line-height: 15px;  
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 2px;
+  }
+
+  &__description {
+    margin-top: 19px;
+    font-size: 12px;
+    line-height: 22px;
+    color: rgba(0, 0, 0, 0.5);
+  }
+
+  &__right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+  }
+
+  &__control {
+    display: flex;
+    gap: 12px;
+    margin-top: 30px;
+  }
+
+  &__body {
+    text-overflow: ellipsis;
+    margin-top: 4px;
+    font-size: 12px;
+    line-height: 22px;
+    color: rgba(0, 0, 0, 0.75);
+  }
+
+  &__markdown {
+    font-size: 20px;
+    line-height: 28px;
+  }
+}
+
+.btn {
+  border: none;
+  background-color: transparent;
+  font-size: 18px;
+  line-height: 28px;
+  cursor: pointer;
+
+  &__delete {
+    padding: 6px 18px;
+    color: #F5222D;
+    border: 1px solid #F5222D;
+    border-radius: 5px; 
+  }
+
+  &__edit {
+    padding: 6px 18px;
+    color: #52C41A;
+    border: 1px solid #52C41A;
+    border-radius: 5px; 
+  }
+
+  &:hover {
+    opacity: 0.6;
+  }
+}
+
+.articlefull {
+  height: 100%;
+}
