@@ -6,7 +6,9 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { useForm } from 'react-hook-form'
 import { login } from '../../redux/actions'
-import axios from '../../axios'
+import { signIn } from '../../apiService'
+import * as e from '../../errors'
+import * as routes from '../../routes'
 
 import styles from './SignIn.module.scss'
 
@@ -21,21 +23,14 @@ function SignIn() {
     setError,
   } = useForm()
 
-  const onSubmit = (data) => {
-    axios
-      .post('/users/login', { user: data })
-      .then((res) => {
-        dispatch(login(res.data?.user))
-        navigate('/')
-      })
-      .catch((err) => {
-        if (err.response) {
-          setError('password', {
-            type: 'server',
-            message: 'Email or password invalid',
-          })
-        }
-      })
+  const onSubmit = async (data) => {
+    try {
+      const res = await signIn(data)
+      dispatch(login(res.data?.user))
+      navigate(routes.rootPath)
+    } catch (err) {
+      if (err.response) setError('password', e.server.emailOrPassword)
+    }
   }
 
   return (
@@ -46,16 +41,9 @@ function SignIn() {
           Email address
           <input
             id="email"
-            className={styles.input}
+            className={`${styles.input} ${errors.email && styles.errorborder}`}
             type="text"
-            style={errors.email && { borderColor: ' #F5222D' }}
-            {...register('email', {
-              required: 'Enter email',
-              minLength: {
-                value: 6,
-                message: 'Your email needs to be at least 6 characters.',
-              },
-            })}
+            {...register('email', e.client.email)}
           />
           {errors.email && (
             <span className={styles.error}>{`${errors.email.message}`}</span>
@@ -65,20 +53,11 @@ function SignIn() {
           Password
           <input
             id="password"
-            className={styles.input}
+            className={`${styles.input} ${
+              errors.password && styles.errorborder
+            }`}
             type="password"
-            style={errors.password && { borderColor: ' #F5222D' }}
-            {...register('password', {
-              required: 'Enter password',
-              minLength: {
-                value: 8,
-                message: 'Your password needs to be at least 8 characters.',
-              },
-              maxLength: {
-                value: 40,
-                message: 'Your password needs to be at maximum 40 characters.',
-              },
-            })}
+            {...register('password', e.client.password)}
           />
           {errors.password && (
             <span className={styles.error}>{`${errors.password.message}`}</span>

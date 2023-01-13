@@ -2,6 +2,7 @@
 import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import * as routes from './routes'
 import styles from './App.module.scss'
 
 import Header from './components/Header'
@@ -15,7 +16,7 @@ import NotFound from './pages/NotFound'
 
 function ProtectedRoute(user, children) {
   if (!user) {
-    return <Navigate to="/sign-in" replace />
+    return <Navigate to={routes.signInPath} replace />
   }
 
   return children
@@ -28,18 +29,21 @@ export default function App() {
     <div className={styles.app}>
       <Header />
       <Routes>
-        <Route path="/" element={<Articles />} />
-        <Route path="/articles" element={<Articles />} />
-        <Route path="/articles/:slug" element={<ArticleFull />} />
+        <Route path={routes.rootPath} element={<Articles />} />
+        <Route path={routes.articlesPath} element={<Articles />} />
+        <Route path={routes.articleFullPath} element={<ArticleFull />} />
         <Route
-          path="/articles/:slug/edit"
+          path={routes.editPath}
           element={ProtectedRoute(user, <NewArticle />)}
         />
-        <Route path="/sign-in" element={<SignIn />} />
-        <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/profile" element={ProtectedRoute(user, <Profile />)} />
+        <Route path={routes.signInPath} element={<SignIn />} />
+        <Route path={routes.signUpPath} element={<SignUp />} />
         <Route
-          path="/new-article"
+          path={routes.profilePath}
+          element={ProtectedRoute(user, <Profile />)}
+        />
+        <Route
+          path={routes.newArticlePath}
           element={ProtectedRoute(user, <NewArticle />)}
         />
         <Route path="*" element={<NotFound />} />

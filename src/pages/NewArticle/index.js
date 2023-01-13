@@ -7,7 +7,8 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { Alert } from 'antd'
-import axios from '../../axios'
+import { getArticle, newArticle, updateArticle } from '../../apiService'
+import * as routes from '../../routes'
 
 import styles from './NewArticle.module.scss'
 
@@ -33,19 +34,21 @@ function NewArticle() {
   })
 
   useEffect(() => {
-    if (slug) {
-      axios
-        .get(`/articles/${slug}`)
-        .then((res) => {
-          const article = res.data?.article
+    async function fetchData() {
+      try {
+        const res = await getArticle(slug, {})
+        const article = res.data?.article
 
-          setValue('title', article?.title)
-          setValue('description', article?.description)
-          setValue('body', article?.body)
-          setValue('tagList', article?.tagList)
-        })
-        .catch(() => {})
+        setValue('title', article?.title)
+        setValue('description', article?.description)
+        setValue('body', article?.body)
+        setValue('tagList', article?.tagList)
+      } catch (err) {
+        setError(err)
+      }
     }
+
+    if (slug) fetchData()
   }, [slug])
 
   const onSubmit = async (data) => {
@@ -57,12 +60,12 @@ function NewArticle() {
 
     try {
       const res = isEditing
-        ? await axios.put(`/articles/${slug}`, { article: data }, config)
-        : await axios.post('/articles', { article: data }, config)
+        ? await updateArticle(slug, data, config)
+        : await newArticle(data, config)
 
       const newSlug = isEditing ? slug : res.data?.article?.slug
 
-      navigate(`/articles/${newSlug}`)
+      navigate(`${routes.articlesPath}/${newSlug}`)
     } catch (err) {
       setError(err)
     }
@@ -81,9 +84,7 @@ function NewArticle() {
             className={styles.input}
             type="text"
             style={errors.title && { borderColor: ' #F5222D' }}
-            {...register('title', {
-              required: 'Enter title',
-            })}
+            {...register('title', { required: 'Enter title' })}
           />
           {errors.title && (
             <span className={styles.error}>{`${errors.title.message}`}</span>
@@ -97,9 +98,7 @@ function NewArticle() {
             className={styles.input}
             type="text"
             style={errors.description && { borderColor: ' #F5222D' }}
-            {...register('description', {
-              required: 'Enter description',
-            })}
+            {...register('description', { required: 'Enter description' })}
           />
           {errors.description && (
             <span className={styles.error}>
@@ -116,9 +115,7 @@ function NewArticle() {
             rows="7"
             placeholder="Text"
             style={errors.description && { borderColor: ' #F5222D' }}
-            {...register('body', {
-              required: 'Enter body',
-            })}
+            {...register('body', { required: 'Enter body' })}
           />
           {errors.body && (
             <span className={styles.error}>{`${errors.body.message}`}</span>

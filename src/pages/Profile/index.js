@@ -6,9 +6,10 @@ import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import styles from './Profile.module.scss'
-
+import { updateUser } from '../../apiService'
 import { login } from '../../redux/actions'
-import axios from '../../axios'
+import * as e from '../../errors'
+import * as routes from '../../routes'
 
 function Profile() {
   const dispatch = useDispatch()
@@ -36,41 +37,19 @@ function Profile() {
       },
     }
 
-    axios
-      .put('/user', { user: data }, config)
-      .then((res) => {
-        dispatch(login(res.data?.user))
-        navigate('/')
-      })
-      .catch((err) => {
-        if (err.response) {
-          const serverErrors = err.response.data.errors
-          if (serverErrors.username) {
-            setError('username', {
-              type: 'server',
-              message: 'Something went wrong with username',
-            })
-          }
-          if (serverErrors.email) {
-            setError('email', {
-              type: 'server',
-              message: 'Something went wrong with email',
-            })
-          }
-          if (serverErrors.password) {
-            setError('password', {
-              type: 'server',
-              message: 'Something went wrong with password',
-            })
-          }
-          if (serverErrors.image) {
-            setError('image', {
-              type: 'server',
-              message: 'Something went wrong with image',
-            })
-          }
-        }
-      })
+    try {
+      const res = await updateUser(data, config)
+      dispatch(login(res.data?.user))
+      navigate(routes.rootPath)
+    } catch (err) {
+      if (err.response) {
+        const serverErrors = err.response.data.errors
+        if (serverErrors.username) setError('username', e.server.username)
+        if (serverErrors.email) setError('email', e.server.email)
+        if (serverErrors.password) setError('password', e.server.password)
+        if (serverErrors.image) setError('image', e.server.image)
+      }
+    }
   }
 
   return (
@@ -81,20 +60,11 @@ function Profile() {
           Username
           <input
             id="username"
-            className={styles.input}
+            className={`${styles.input} ${
+              errors.username && styles.errorborder
+            }`}
             type="text"
-            style={errors.userName && { borderColor: ' #F5222D' }}
-            {...register('username', {
-              required: 'Enter username',
-              minLength: {
-                value: 3,
-                message: 'Your username needs to be at least 3 characters.',
-              },
-              maxLength: {
-                value: 20,
-                message: 'Your username needs to be at maximum 20 characters.',
-              },
-            })}
+            {...register('username', e.client.username)}
           />
           {errors.username && (
             <span className={styles.error}>{`${errors.username.message}`}</span>
@@ -104,16 +74,9 @@ function Profile() {
           Email address
           <input
             id="email"
-            className={styles.input}
+            className={`${styles.input} ${errors.email && styles.errorborder}`}
             type="text"
-            style={errors.email && { borderColor: ' #F5222D' }}
-            {...register('email', {
-              required: 'Enter email',
-              minLength: {
-                value: 6,
-                message: 'Your email needs to be at least 6 characters.',
-              },
-            })}
+            {...register('email', e.client.email)}
           />
           {errors.email && (
             <span className={styles.error}>{`${errors.email.message}`}</span>
@@ -123,20 +86,11 @@ function Profile() {
           New password
           <input
             id="password"
-            className={styles.input}
+            className={`${styles.input} ${
+              errors.password && styles.errorborder
+            }`}
             type="password"
-            style={errors.password && { borderColor: ' #F5222D' }}
-            {...register('password', {
-              required: 'Enter valid password',
-              minLength: {
-                value: 8,
-                message: 'Your password needs to be at least 8 characters.',
-              },
-              maxLength: {
-                value: 40,
-                message: 'Your password needs to be at maximum 40 characters.',
-              },
-            })}
+            {...register('password', e.client.password)}
           />
           {errors.password && (
             <span className={styles.error}>{`${errors.password.message}`}</span>
@@ -146,20 +100,9 @@ function Profile() {
           Avatar image (url)
           <input
             id="image"
-            className={styles.input}
+            className={`${styles.input} ${errors.image && styles.errorborder}`}
             type="text"
-            style={errors.image && { borderColor: ' #F5222D' }}
-            {...register('image', {
-              required: 'Enter valid url',
-              minLength: {
-                value: 6,
-                message: 'Your url needs to be at least 8 characters.',
-              },
-              maxLength: {
-                value: 120,
-                message: 'Your url needs to be at maximum 40 characters.',
-              },
-            })}
+            {...register('image', e.client.image)}
           />
           {errors.image && (
             <span className={styles.error}>{`${errors.image.message}`}</span>

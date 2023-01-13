@@ -5,12 +5,14 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { HeartOutlined, HeartFilled } from '@ant-design/icons'
 import ReactMarkdown from 'react-markdown'
+import { nanoid } from 'nanoid'
 import { Alert, Popconfirm, message } from 'antd'
+import { favoriteArticle, deleteArticle } from '../../apiService'
+import * as routes from '../../routes'
 
 import Avatar from '../Avatar'
 
 import styles from './Article.module.scss'
-import axios from '../../axios'
 
 function Article({ article, isFull }) {
   const [articleLoc, setArticleLoc] = useState(article)
@@ -43,12 +45,10 @@ function Article({ article, isFull }) {
   const favoritedHandler = async () => {
     try {
       if (isAuth) {
-        const res = favorited
-          ? await axios.delete(`/articles/${slug}/favorite`, config)
-          : await axios.post(`/articles/${slug}/favorite`, {}, config)
+        const res = await favoriteArticle(slug, favorited, config)
         setArticleLoc(res.data?.article)
       } else {
-        navigate('/sign-in')
+        navigate(routes.signInPath)
       }
     } catch (e) {
       setError(e)
@@ -56,23 +56,26 @@ function Article({ article, isFull }) {
   }
 
   const tags = tagList.map((tag) => {
-    if (tag) {
-      if (tag.trim().length > 0 && tag.trim().length < 20) {
-        return (
-          <span className={styles.article__tag} key={tag + Math.random()}>
-            {tag}
-          </span>
-        )
-      }
+    if (tag.trim().length > 0) {
+      return (
+        <span
+          className={`${styles.article__tag} ${
+            isFull ? null : styles.overflow
+          }`}
+          key={nanoid()}
+        >
+          {tag}
+        </span>
+      )
     }
     return false
   })
 
   const confirm = async () => {
     try {
-      await axios.delete(`/articles/${slug}`, config)
+      await deleteArticle(slug, config)
       message.success('Article has been deleted')
-      navigate('/', { replace: true })
+      navigate(routes.rootPath, { replace: true })
     } catch (err) {
       message.error(`Error ${err.status}`)
     }
@@ -86,7 +89,12 @@ function Article({ article, isFull }) {
         <div className={styles.article__left}>
           <div className={styles.article__top}>
             {!isFull ? (
-              <Link to={`/articles/${slug}`} className={styles.article__title}>
+              <Link
+                to={`/articles/${slug}`}
+                className={`${styles.article__title} ${
+                  isFull ? null : styles.overflow
+                }`}
+              >
                 {title}
               </Link>
             ) : (
@@ -107,8 +115,20 @@ function Article({ article, isFull }) {
             )}
             <div className={styles.article__like}>{favoritesCount}</div>
           </div>
-          <div className={styles.article__tags}>{tags}</div>
-          <div className={styles.article__description}>{description}</div>
+          <div
+            className={`${styles.article__tags} ${
+              isFull ? null : styles.article__tagsnowrap
+            }`}
+          >
+            {tags}
+          </div>
+          <div
+            className={`${styles.article__description} ${
+              isFull ? null : styles.overflow
+            }`}
+          >
+            {description}
+          </div>
         </div>
         <div className={styles.article__right}>
           <Avatar user={author} createdAt={createdAt} />

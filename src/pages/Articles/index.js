@@ -1,9 +1,9 @@
 /* eslint-disable indent */
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import axios from 'axios'
 import { Pagination, Spin, Alert } from 'antd'
 import styles from './Articles.module.scss'
+import { getArticles as apiGetArticles } from '../../apiService'
 
 import Article from '../../components/Article'
 
@@ -29,10 +29,7 @@ function Articles() {
       : {}
 
     try {
-      const { data } = await axios.get(
-        `https://blog.kata.academy/api/articles?limit=${limit}&offset=${offset}`,
-        config
-      )
+      const { data } = await apiGetArticles(limit, offset, config)
       setArticles(data.articles)
       setArticlesCount(data.articlesCount)
     } catch (err) {
@@ -66,6 +63,7 @@ function Articles() {
         pageSize={5}
         total={articlesCount}
         onChange={(e) => setPage(e)}
+        showSizeChanger={false}
       />
     </div>
   )

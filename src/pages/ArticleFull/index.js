@@ -1,10 +1,10 @@
 /* eslint-disable indent */
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import axios from 'axios'
 import { useParams } from 'react-router-dom'
 import { Spin, Alert } from 'antd'
 import styles from './ArticleFull.module.scss'
+import { getArticle as apiGetAtricle } from '../../apiService'
 
 import Article from '../../components/Article'
 
@@ -26,10 +26,7 @@ function ArticleFull() {
         }
       : {}
     try {
-      const { data } = await axios.get(
-        `https://blog.kata.academy/api/articles/${slug}`,
-        config
-      )
+      const { data } = await apiGetAtricle(slug, config)
       setArticle(data.article)
     } catch (err) {
       setError(err)

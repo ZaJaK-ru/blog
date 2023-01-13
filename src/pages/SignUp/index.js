@@ -7,9 +7,10 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 import styles from './SignUp.module.scss'
-
+import { signUp } from '../../apiService'
 import { login } from '../../redux/actions'
-import axios from '../../axios'
+import * as e from '../../errors'
+import * as routes from '../../routes'
 
 function SignUp() {
   const dispatch = useDispatch()
@@ -24,35 +25,18 @@ function SignUp() {
   } = useForm()
 
   const onSubmit = async (data) => {
-    axios
-      .post('/users', { user: data })
-      .then((res) => {
-        dispatch(login(res.data?.user))
-        navigate('/')
-      })
-      .catch((err) => {
-        if (err.response) {
-          const serverErrors = err.response.data.errors
-          if (serverErrors.username) {
-            setError('username', {
-              type: 'server',
-              message: 'Something went wrong with username',
-            })
-          }
-          if (serverErrors.email) {
-            setError('email', {
-              type: 'server',
-              message: 'Something went wrong with email',
-            })
-          }
-          if (serverErrors.password) {
-            setError('password', {
-              type: 'server',
-              message: 'Something went wrong with password',
-            })
-          }
-        }
-      })
+    try {
+      const res = await signUp(data)
+      dispatch(login(res.data?.user))
+      navigate(routes.rootPath)
+    } catch (err) {
+      if (err.response) {
+        const serverErrors = err.response.data.errors
+        if (serverErrors.username) setError('username', e.server.username)
+        if (serverErrors.email) setError('email', e.server.email)
+        if (serverErrors.password) setError('password', e.server.password)
+      }
+    }
   }
 
   return (
@@ -64,20 +48,11 @@ function SignUp() {
           <input
             id="username"
             name="username"
-            className={styles.input}
+            className={`${styles.input} ${
+              errors.username && styles.errorborder
+            }`}
             type="text"
-            style={errors.userName && { borderColor: ' #F5222D' }}
-            {...register('username', {
-              required: 'Enter username',
-              minLength: {
-                value: 3,
-                message: 'Your username needs to be at least 3 characters.',
-              },
-              maxLength: {
-                value: 20,
-                message: 'Your username needs to be at maximum 20 characters.',
-              },
-            })}
+            {...register('username', e.client.username)}
           />
           {errors.username && (
             <span className={styles.error}>{`${errors.username.message}`}</span>
@@ -87,16 +62,9 @@ function SignUp() {
           Email address
           <input
             id="email"
-            className={styles.input}
+            className={`${styles.input} ${errors.email && styles.errorborder}`}
             type="text"
-            style={errors.email && { borderColor: ' #F5222D' }}
-            {...register('email', {
-              required: 'Enter email',
-              minLength: {
-                value: 6,
-                message: 'Your email needs to be at least 6 characters.',
-              },
-            })}
+            {...register('email', e.client.email)}
           />
           {errors.email && (
             <span className={styles.error}>{`${errors.email.message}`}</span>
@@ -106,20 +74,11 @@ function SignUp() {
           Password
           <input
             id="password"
-            className={styles.input}
+            className={`${styles.input} ${
+              errors.password && styles.errorborder
+            }`}
             type="password"
-            style={errors.password && { borderColor: ' #F5222D' }}
-            {...register('password', {
-              required: 'Enter valid password',
-              minLength: {
-                value: 8,
-                message: 'Your password needs to be at least 8 characters.',
-              },
-              maxLength: {
-                value: 40,
-                message: 'Your password needs to be at maximum 40 characters.',
-              },
-            })}
+            {...register('password', e.client.password)}
           />
           {errors.password && (
             <span className={styles.error}>{`${errors.password.message}`}</span>
@@ -129,19 +88,12 @@ function SignUp() {
           Repeat password
           <input
             id="password1"
-            className={styles.input}
+            className={`${styles.input} ${
+              errors.password1 && styles.errorborder
+            }`}
             type="password"
-            style={errors.password1 && { borderColor: ' #F5222D' }}
             {...register('password1', {
-              required: 'Please input your password confirmation.',
-              minLength: {
-                value: 8,
-                message: 'Your password needs to be at least 8 characters.',
-              },
-              maxLength: {
-                value: 40,
-                message: 'Your password needs to be at maximum 40 characters.',
-              },
+              ...e.client.passwordConfirmation,
               validate: (value) =>
                 value === watch('password') || 'Passwords dont match.',
             })}
@@ -158,9 +110,7 @@ function SignUp() {
             type="checkbox"
             name="checkbox"
             id="checkbox"
-            {...register('checkbox', {
-              required: 'Please accept the terms and conditions to continue',
-            })}
+            {...register('checkbox', e.client.checkbox)}
           />
           <div>I agree to the processing of my personal information</div>
         </label>

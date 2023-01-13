@@ -9,21 +9,9 @@ const initialState = {
 const AuthReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case LOGIN_USER:
-      localStorage.setItem('isAuth', true)
-      localStorage.setItem('user', JSON.stringify(payload))
-      return {
-        ...state,
-        isAuth: true,
-        user: payload,
-      }
+      return { ...state, isAuth: true, user: payload }
     case LOGOUT_USER:
-      localStorage.setItem('isAuth', false)
-      localStorage.removeItem('user')
-      return {
-        ...state,
-        isAuth: false,
-        user: null,
-      }
+      return { ...state, isAuth: false, user: null }
     default:
       return state
   }
