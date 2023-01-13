@@ -1,1 +1,1 @@
-# [https://blog-phi-kohl-33.vercel.app/](https://blog-phi-kohl-33.vercel.app/ "Blog")
+# [https://blog-zajak-ru.vercel.app/](https://blog-zajak-ru.vercel.app/ "Blog")
